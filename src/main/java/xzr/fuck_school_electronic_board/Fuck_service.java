@@ -9,6 +9,8 @@ import android.os.IBinder;
 
 import java.text.SimpleDateFormat;
 
+import xzr.fuck_school_electronic_board.utils.SharedPreferenceUtil;
+
 public class Fuck_service extends Service {
     boolean running;
     PendingIntent p(){
@@ -23,17 +25,22 @@ SimpleDateFormat df(){
             while (true){
                 try{
                     NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                    Notification baseNF = new Notification.Builder(Fuck_service.this)//设置启动的context
-                            .setContentTitle("轻触此处来干翻电子班牌")//设置标题
-                            .setContentText("最后一次状态检查："+df().format(System.currentTimeMillis()))//设置内容
-                            .setSmallIcon(R.mipmap.ic_launcher)//设置要显示的两个图片 小图片可以设置资源文件，大图片为bitmap类型所以需要decodeResource
-                            // .setChannelId(NotificationChannel.DEFAULT_CHANNEL_ID)
-                            //.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
-                            .setOngoing(true)
-                            .setContentIntent(p())
-                            .build();
-                    nm.notify(1, baseNF);
-                    Thread.sleep(10000);
+                    if(SharedPreferenceUtil.gettz()) {
+                        Notification baseNF = new Notification.Builder(Fuck_service.this)//设置启动的context
+                                .setContentTitle("干翻电子班牌")//设置标题
+                                .setContentText("轻触此处来干翻电子班牌")//设置内容
+                                .setSmallIcon(R.mipmap.ic_launcher)//设置要显示的两个图片 小图片可以设置资源文件，大图片为bitmap类型所以需要decodeResource
+                                // .setChannelId(NotificationChannel.DEFAULT_CHANNEL_ID)
+                                //.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
+                                .setOngoing(true)
+                                .setContentIntent(p())
+                                .build();
+                        nm.notify(1, baseNF);
+                    }
+                    else{
+                        nm.cancel(1);
+                    }
+                    Thread.sleep(1000);
 
                 }
                 catch (Exception e){
