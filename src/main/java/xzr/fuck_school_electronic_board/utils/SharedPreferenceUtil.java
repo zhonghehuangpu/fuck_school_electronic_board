@@ -17,4 +17,7 @@ public class SharedPreferenceUtil {
     public static boolean gettz(){
         return sh.getBoolean("tz",false);
     }
+    public static boolean getjk(){
+        return sh.getBoolean("jk",false);
+    }
 }

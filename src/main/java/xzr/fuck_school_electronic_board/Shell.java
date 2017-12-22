@@ -10,7 +10,7 @@ import java.io.OutputStreamWriter;
  */
 
 public class Shell {
-    public String su(String cmd)throws Exception{
+    public static String su(String cmd)throws Exception{
         String result="";
         Process p=new ProcessBuilder("su").redirectErrorStream(true).start();
         OutputStreamWriter o=new OutputStreamWriter(p.getOutputStream());

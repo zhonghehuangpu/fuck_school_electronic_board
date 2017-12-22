@@ -11,43 +11,18 @@ import java.text.SimpleDateFormat;
 
 import xzr.fuck_school_electronic_board.utils.SharedPreferenceUtil;
 
+import static xzr.fuck_school_electronic_board.MainActivity.toast;
+import static xzr.fuck_school_electronic_board.utils.SharedPreferenceUtil.sh;
+
 public class Fuck_service extends Service {
-    boolean running;
     PendingIntent p(){
         Intent i=new Intent(this,MainActivity.class);
         return PendingIntent.getActivity(Fuck_service.this,0,i.setAction("fuck_now"),PendingIntent.FLAG_CANCEL_CURRENT);
     }
-SimpleDateFormat df(){
-    return new SimpleDateFormat("HH:mm:ss");
-}
-    class fuck_thread extends Thread{
-        public void run(){
-            while (true){
-                try{
-                    NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                    if(SharedPreferenceUtil.gettz()) {
-                        Notification baseNF = new Notification.Builder(Fuck_service.this)//设置启动的context
-                                .setContentTitle("干翻电子班牌")//设置标题
-                                .setContentText("轻触此处来干翻电子班牌")//设置内容
-                                .setSmallIcon(R.mipmap.ic_launcher)//设置要显示的两个图片 小图片可以设置资源文件，大图片为bitmap类型所以需要decodeResource
-                                // .setChannelId(NotificationChannel.DEFAULT_CHANNEL_ID)
-                                //.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
-                                .setOngoing(true)
-                                .setContentIntent(p())
-                                .build();
-                        nm.notify(1, baseNF);
-                    }
-                    else{
-                        nm.cancel(1);
-                    }
-                    Thread.sleep(1000);
 
-                }
-                catch (Exception e){
-
-                }
-            }
-        }
+    PendingIntent p1(){
+        Intent i=new Intent(this,MainActivity.class);
+        return PendingIntent.getActivity(Fuck_service.this,0,i.setAction("jk_now"),PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
     @Override
@@ -60,32 +35,68 @@ SimpleDateFormat df(){
     public void onCreate() {
         super.onCreate();
     }
-    class fuck_now extends Thread{
-    public void run(){
-        try {
-            new Shell().su("am force-stop com.surfkj.maincard");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-    }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
     try {
         if(intent.getAction().equals("fuck_now")){
-            new fuck_now().start();
+            new cmds.fuck_now();
+        }
+        if(intent.getAction().equals("jk")){
+            String cid=sh.getString("cid","");
+            if(!cid.equals("")) {
+                new cmds.jk(cid);
+            }
+            else{
+                toast("尚未初始化",this);
+            }
 
         }
     }
     catch (Exception e){
 
     }
-    if(!running){
-        new fuck_thread().start();
-        running=true;
-    }
+        try{
+            NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+            if(SharedPreferenceUtil.gettz()) {
+                Notification baseNF = new Notification.Builder(Fuck_service.this)//设置启动的context
+                        .setContentTitle("干翻电子班牌")//设置标题
+                        .setContentText("轻触此处来干翻电子班牌")//设置内容
+                        .setSmallIcon(R.mipmap.ic_launcher)//设置要显示的两个图片 小图片可以设置资源文件，大图片为bitmap类型所以需要decodeResource
+                        // .setChannelId(NotificationChannel.DEFAULT_CHANNEL_ID)
+                        //.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
+                        .setOngoing(true)
+                        .setContentIntent(p())
+                        .build();
+                nm.notify(1, baseNF);
+            }
+            else{
+                nm.cancel(1);
+            }
+
+
+            //刷假卡
+
+            if(SharedPreferenceUtil.getjk()) {
+                Notification baseNF = new Notification.Builder(Fuck_service.this)//设置启动的context
+                        .setContentTitle("刷假卡")//设置标题
+                        .setContentText("轻触此处来模拟一次刷卡")//设置内容
+                        .setSmallIcon(R.mipmap.ic_launcher)//设置要显示的两个图片 小图片可以设置资源文件，大图片为bitmap类型所以需要decodeResource
+                        // .setChannelId(NotificationChannel.DEFAULT_CHANNEL_ID)
+                        //.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_foreground))
+                        .setOngoing(true)
+                        .setContentIntent(p1())
+                        .build();
+                nm.notify(2, baseNF);
+            }
+            else{
+                nm.cancel(2);
+            }
+
+        }
+        catch (Exception e){
+
+        }
 
         return super.onStartCommand(intent, flags, startId);
     }
