@@ -18,7 +18,6 @@ import xzr.fuck_school_electronic_board.utils.SharedPreferenceUtil;
 import xzr.fuck_school_electronic_board.utils.versionutil;
 
 import static xzr.fuck_school_electronic_board.utils.SharedPreferenceUtil.se;
-import static xzr.fuck_school_electronic_board.utils.SharedPreferenceUtil.sh;
 
 
 public class MainActivity extends Activity {
@@ -26,6 +25,17 @@ public class MainActivity extends Activity {
     Switch sw2;
     TextView t1;
     AlertDialog dia;
+    AlertDialog dia2;
+    int ddos_click=0;
+    public void ddos(View v){
+        if(ddos_click<4){
+            ddos_click++;
+        }
+        else{
+            ddos_click=0;
+            dia2.show();
+        }
+    }
     class start_settings extends Thread{
         public void run(){
             try {
@@ -42,6 +52,29 @@ public class MainActivity extends Activity {
     }
     void initviews(){
         SharedPreferenceUtil.init(this);
+
+        final View pwdv2=LayoutInflater.from(this).inflate(R.layout.pwd_layout,null);
+        dia2=new AlertDialog.Builder(this)
+                .setTitle("输入“干翻电子班牌”的超级管理员密码")
+                .setView(pwdv2)
+                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        EditText eee=(EditText)pwdv2.findViewById(R.id.pwde);
+                        if(eee.getText().toString().equals("233")){
+                            startActivity(new Intent(MainActivity.this,ddosActivity.class));
+                            eee.setText("");
+                        }
+                        else {
+                            toast("密码错误！",MainActivity.this);
+                        }
+                    }
+                })
+                .setNegativeButton("取消",null)
+                .create();
+
+
+
         final View pwdv=LayoutInflater.from(this).inflate(R.layout.pwd_layout,null);
         dia=new AlertDialog.Builder(this)
                 .setTitle("输入“干翻电子班牌”的超级管理员密码")

@@ -3,6 +3,7 @@
     package="xzr.fuck_school_electronic_board">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -40,8 +41,11 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".jkActivity"
-            android:label="刷假卡配置"></activity>
+        <activity
+            android:name=".jkActivity"
+            android:label="刷假卡配置" />
+        <activity android:name=".ddosActivity"
+            android:label="DDOS配置器"></activity>
     </application>
 
 </manifest>
