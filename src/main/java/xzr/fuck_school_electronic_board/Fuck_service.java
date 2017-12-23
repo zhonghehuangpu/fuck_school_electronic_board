@@ -37,6 +37,7 @@ public class Fuck_service extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        SharedPreferenceUtil.init(this);
     try {
         if(intent.getAction().equals("fuck_now")){
             new cmds.fuck_now();
