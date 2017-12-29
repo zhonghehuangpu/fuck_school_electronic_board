@@ -40,7 +40,7 @@ public class Fuck_service extends Service {
         SharedPreferenceUtil.init(this);
     try {
         if(intent.getAction().equals("fuck_now")){
-            new cmds.fuck_now();
+            new cmds.fuck_now().start();
         }
         if(intent.getAction().equals("jk")){
             String cid=sh.getString("cid","");
